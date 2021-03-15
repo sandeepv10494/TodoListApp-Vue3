@@ -11,12 +11,12 @@
         <ion-content class="overflow-auto">
             <div class="flex flex-col justify-center items-center mt-2">
                 <div class="text-center">
-                    <ion-icon :icon="home" size="large" style="color:#2DD4BF"></ion-icon>
+                    <ion-icon :icon="football" size="large" class="text-gray-900"></ion-icon>
                 </div>
 
                 <div class="text-center">
-                    <ion-card-title class="text-2xl font-semibold">Home</ion-card-title>
-                    <ion-card-subtitle>{{state.tasksHome.length}} Tasks</ion-card-subtitle>
+                    <ion-card-title class="text-2xl font-semibold">Sport</ion-card-title>
+                    <ion-card-subtitle>{{state.tasksSport.length}} Tasks</ion-card-subtitle>
                 </div>
             </div>
 
@@ -138,63 +138,69 @@
 </template>
 
 <script>
-import {defineComponent, ref, reactive, computed, onMounted} from 'vue';
-import { IonPage, IonToolbar,IonButtons,IonBackButton,IonIcon, IonContent,
-IonCardTitle,IonCardSubtitle,IonListHeader,IonItemSliding,IonItemOptions,IonItemOption,
-IonLabel,IonCheckbox,IonList,IonItem,IonFab,IonFabButton,IonModal } from '@ionic/vue';
-import {ellipsisVertical,home,trash,add} from 'ionicons/icons';
+import {IonPage,IonToolbar,IonIcon,IonContent,
+IonCardSubtitle,IonCardTitle,IonList,IonListHeader,IonItem,IonLabel,
+IonCheckbox,IonButtons,IonBackButton,IonFab,IonFabButton,IonModal,IonItemSliding,IonItemOptions,IonItemOption} from '@ionic/vue';
+import { defineComponent,reactive,ref,onMounted,computed} from 'vue';
+import {ellipsisVertical,add,trash,football } from 'ionicons/icons';
 import NewTask from '@/components/NewTask.vue';
-import {useStore} from 'vuex';
+import { useStore } from 'vuex';
 export default defineComponent({
     components:{
-       IonPage,IonToolbar,IonButtons,IonBackButton,IonIcon,IonContent,
-       IonCardTitle,IonCardSubtitle,IonListHeader,IonItemSliding,
-       IonItemOptions,IonItemOption,IonLabel,IonCheckbox,IonList,IonItem,
-       IonFab,IonFabButton,IonModal,
-       NewTask  
+      IonPage,IonToolbar,/*IonButtons*/
+      IonIcon,
+      IonContent/*IonButton */,
+      IonCardSubtitle,IonCardTitle,
+      IonList,IonListHeader,IonItem,IonLabel,
+      IonCheckbox,IonButtons,IonBackButton,
+      IonFab,IonFabButton,NewTask,IonModal,
+      IonItemSliding,IonItemOptions,IonItemOption
     },
     setup(){
-        const isOpenNewTask = ref(false);
-        const store = useStore();
-        const state = reactive({
-            tasksHome: computed(() => {
-                return store.getters.tasksByCategory('Home');
-            }),
-            today: computed(() => {
-                return store.getters.today(state.tasksHome);
-            }),
-            late: computed(() => {
-                return store.getters.late(state.tasksHome);
-            }),
-            later: computed(() => {
-                return store.getters.later(state.tasksHome);
-            }),
-            done: computed(() => {
-                return store.getters.done(state.tasksHome);
-            })
-        })
-        function getTasksHome() {
-            store.commit('getTasks');
-        }
-        function doneTask(item) {
-            store.commit('doneTask',item);
-        }
-        function notDoneTask(item) {
-            store.commit('notDoneTask',item);
-        }
-        function deleteTask(item) {
-            store.commit('deleteTask',item);
-        }
-        onMounted(() => {
-            if (store.state.tasks.length == 0) {
-                getTasksHome();    
-            }
-            
-        })
-        return{
-            isOpenNewTask,store,state,getTasksHome,doneTask,notDoneTask,deleteTask,
-            ellipsisVertical,home,trash,add
-        }
+      const store = useStore();
+      const isOpenNewTask = ref(false);
+      const state = reactive({
+        tasksSport: computed(() => {
+          return store.getters.tasksByCategory('Sport')
+        }),
+        
+        today: computed(() => {
+            return store.getters.today(state.tasksSport);
+        }),
+        late: computed(() => {
+            return store.getters.late(state.tasksSport);
+        }),
+        later: computed(() => {
+            return store.getters.later(state.tasksSport);
+        }),
+        done: computed(() => {
+            return store.getters.done(state.tasksSport);
+        }),
+        
+      }); 
+      function getTasksSport() {
+        store.commit('getTasks');
+      }
+      function doneTask(item) {
+        store.commit('doneTask', item)
+      }
+      function notDoneTask(item) {
+        store.commit('notDoneTask', item)
+      }
+      function deleteTask(item){
+        store.commit('deleteTask',item)
+      }
+    onMounted(() => {
+      // ... 
+      if (store.state.tasks.length == 0) {
+        getTasksSport();  
+      }
+              
+    })  
+      return{
+        state,getTasksSport,store,doneTask,notDoneTask,isOpenNewTask,deleteTask,
+        ellipsisVertical,add,trash,football 
+      }
     }
 })
 </script>

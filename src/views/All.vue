@@ -2,7 +2,7 @@
     <ion-page>
         <ion-toolbar>
             <ion-buttons slot="start">
-                <ion-back-button default-href="/lists"></ion-back-button>
+                <ion-back-button default-href="/Lists"></ion-back-button>
             </ion-buttons>
 
             <ion-icon :icon="ellipsisVertical" slot="end" class="text-2xl"></ion-icon>
@@ -11,12 +11,12 @@
         <ion-content class="overflow-auto">
             <div class="flex flex-col justify-center items-center mt-2">
                 <div class="text-center">
-                    <ion-icon :icon="home" size="large" style="color:#2DD4BF"></ion-icon>
+                    <ion-icon :icon="clipboard" size="large" color="primary"></ion-icon>
                 </div>
 
                 <div class="text-center">
-                    <ion-card-title class="text-2xl font-semibold">Home</ion-card-title>
-                    <ion-card-subtitle>{{state.tasksHome.length}} Tasks</ion-card-subtitle>
+                    <ion-card-title class="text-2xl font-semibold">All</ion-card-title>
+                    <ion-card-subtitle>{{state.tasks.length}} Tasks</ion-card-subtitle>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
                         </ion-item-options>
                         <ion-item detail="true">
                             <ion-label>
-                               <h2>{{item.task}}</h2>
+                                <h2>{{item.task}}</h2>
                                 <p>{{item.dueDate}}</p>
                             </ion-label>
                         </ion-item>
@@ -138,13 +138,13 @@
 </template>
 
 <script>
-import {defineComponent, ref, reactive, computed, onMounted} from 'vue';
+import {defineComponent, reactive, ref, computed, onMounted} from 'vue';
 import { IonPage, IonToolbar,IonButtons,IonBackButton,IonIcon, IonContent,
 IonCardTitle,IonCardSubtitle,IonListHeader,IonItemSliding,IonItemOptions,IonItemOption,
 IonLabel,IonCheckbox,IonList,IonItem,IonFab,IonFabButton,IonModal } from '@ionic/vue';
-import {ellipsisVertical,home,trash,add} from 'ionicons/icons';
+import {ellipsisVertical,clipboard,trash,add} from 'ionicons/icons';
 import NewTask from '@/components/NewTask.vue';
-import {useStore} from 'vuex';
+import { useStore } from 'vuex'; 
 export default defineComponent({
     components:{
        IonPage,IonToolbar,IonButtons,IonBackButton,IonIcon,IonContent,
@@ -155,25 +155,25 @@ export default defineComponent({
     },
     setup(){
         const isOpenNewTask = ref(false);
-        const store = useStore();
+        const store = useStore();    
         const state = reactive({
-            tasksHome: computed(() => {
-                return store.getters.tasksByCategory('Home');
+            tasks: computed(() => {
+                return store.state.tasks;
             }),
             today: computed(() => {
-                return store.getters.today(state.tasksHome);
+                return store.getters.today(state.tasks);
             }),
             late: computed(() => {
-                return store.getters.late(state.tasksHome);
+                return store.getters.late(state.tasks);
             }),
             later: computed(() => {
-                return store.getters.later(state.tasksHome);
+                return store.getters.later(state.tasks);
             }),
             done: computed(() => {
-                return store.getters.done(state.tasksHome);
+                return store.getters.done(state.tasks);
             })
         })
-        function getTasksHome() {
+        function getTasks() {
             store.commit('getTasks');
         }
         function doneTask(item) {
@@ -185,15 +185,15 @@ export default defineComponent({
         function deleteTask(item) {
             store.commit('deleteTask',item);
         }
-        onMounted(() => {
+        onMounted(() =>{
             if (store.state.tasks.length == 0) {
-                getTasksHome();    
+                getTasks();    
             }
             
         })
         return{
-            isOpenNewTask,store,state,getTasksHome,doneTask,notDoneTask,deleteTask,
-            ellipsisVertical,home,trash,add
+            isOpenNewTask,store,getTasks,state,doneTask,notDoneTask,deleteTask,
+            ellipsisVertical,clipboard,trash,add
         }
     }
 })

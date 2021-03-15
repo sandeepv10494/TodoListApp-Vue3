@@ -11,12 +11,12 @@
         <ion-content class="overflow-auto">
             <div class="flex flex-col justify-center items-center mt-2">
                 <div class="text-center">
-                    <ion-icon :icon="home" size="large" style="color:#2DD4BF"></ion-icon>
+                    <ion-icon :icon="headset" size="large" class="text-red-400"></ion-icon>
                 </div>
 
                 <div class="text-center">
-                    <ion-card-title class="text-2xl font-semibold">Home</ion-card-title>
-                    <ion-card-subtitle>{{state.tasksHome.length}} Tasks</ion-card-subtitle>
+                    <ion-card-title class="text-2xl font-semibold">Music</ion-card-title>
+                    <ion-card-subtitle>{{state.tasksMusic.length}} Tasks</ion-card-subtitle>
                 </div>
             </div>
 
@@ -138,13 +138,13 @@
 </template>
 
 <script>
-import {defineComponent, ref, reactive, computed, onMounted} from 'vue';
+import {defineComponent, onMounted, reactive, ref, computed} from 'vue';
 import { IonPage, IonToolbar,IonButtons,IonBackButton,IonIcon, IonContent,
 IonCardTitle,IonCardSubtitle,IonListHeader,IonItemSliding,IonItemOptions,IonItemOption,
 IonLabel,IonCheckbox,IonList,IonItem,IonFab,IonFabButton,IonModal } from '@ionic/vue';
-import {ellipsisVertical,home,trash,add} from 'ionicons/icons';
+import {ellipsisVertical,headset,trash,add} from 'ionicons/icons';
 import NewTask from '@/components/NewTask.vue';
-import {useStore} from 'vuex';
+import {useStore} from 'vuex'; 
 export default defineComponent({
     components:{
        IonPage,IonToolbar,IonButtons,IonBackButton,IonIcon,IonContent,
@@ -157,23 +157,23 @@ export default defineComponent({
         const isOpenNewTask = ref(false);
         const store = useStore();
         const state = reactive({
-            tasksHome: computed(() => {
-                return store.getters.tasksByCategory('Home');
+            tasksMusic: computed(() => {
+                return store.getters.tasksByCategory('Music');
             }),
             today: computed(() => {
-                return store.getters.today(state.tasksHome);
+                return store.getters.today(state.tasksMusic);
             }),
             late: computed(() => {
-                return store.getters.late(state.tasksHome);
+                return store.getters.late(state.tasksMusic);
             }),
             later: computed(() => {
-                return store.getters.later(state.tasksHome);
+                return store.getters.later(state.tasksMusic);
             }),
             done: computed(() => {
-                return store.getters.done(state.tasksHome);
+                return store.getters.done(state.tasksMusic);
             })
         })
-        function getTasksHome() {
+        function getTasksMusic() {
             store.commit('getTasks');
         }
         function doneTask(item) {
@@ -187,13 +187,13 @@ export default defineComponent({
         }
         onMounted(() => {
             if (store.state.tasks.length == 0) {
-                getTasksHome();    
+                getTasksMusic();    
             }
             
         })
         return{
-            isOpenNewTask,store,state,getTasksHome,doneTask,notDoneTask,deleteTask,
-            ellipsisVertical,home,trash,add
+            isOpenNewTask,store,state,getTasksMusic,doneTask,notDoneTask,deleteTask,
+            ellipsisVertical,headset,trash,add
         }
     }
 })
