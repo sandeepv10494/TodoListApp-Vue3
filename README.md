@@ -12,6 +12,7 @@
   - Vue3 for SPA
   - Vuex4 for state management
   - Firebase for backend data storage.
+  - Tailwind css for styling
 
 ---
 
